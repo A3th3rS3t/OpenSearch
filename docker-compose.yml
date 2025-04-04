@@ -25,7 +25,7 @@ services:
         soft: 65536
         hard: 65536
     volumes:
-      - "./volumes/config/:/usr/share/opensearch/config/"
+#      - "./volumes/config/:/usr/share/opensearch/config/"
       - "./volumes/opensearch-data:/usr/share/opensearch/data"
       - "./volumes/certs/:/usr/share/opensearch/config/certs:ro"
       - "./volumes/opensearch.yml:/usr/share/opensearch/config/opensearch.yml"
@@ -50,33 +50,7 @@ services:
       - "./volumes/opensearch-dashboards.yml:/usr/share/opensearch-dashboards/config/opensearch_dashboards.yml"
     environment:
       TZ: "Europe/Moscow"
-      OPENSEARCH_HOSTS: '["https://opensearch:9200"]' 
+      OPENSEARCH_HOSTS: '["https://opensearch:9200"]'
       DISABLE_INSTALL_DEMO_CONFIG: "true"
     networks:
       - opensearch_net
-
-  logstash:
-    image: opensearchproject/logstash-oss-with-opensearch-output-plugin:8.9.0
-    container_name: logstash
-    restart: always
-    logging:
-      options:
-        max-size: "1000m"
-        max-file: "3"
-    ports:
-      - "5044:5044"
-    volumes:
-      - ./volumes/logstash/pipelines.yml:/usr/share/logstash/config/pipelines.yml
-      - ./volumes/logstash/conf.d/:/usr/share/logstash/config/conf.d/
-      - ./volumes/logstash/certs/:/usr/share/logstash/config/certs/
-    environment:
-      - "TZ=Europe/Moscow"
-      - "LS_JAVA_OPTS=-Xmx512m -Xms512m"
-    networks:
-      - opensearch_net
-    depends_on:
-      - opensearch
-
-networks:
-  opensearch_net:
-    driver: bridge
