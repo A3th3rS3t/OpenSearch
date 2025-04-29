@@ -54,3 +54,7 @@ services:
       DISABLE_INSTALL_DEMO_CONFIG: "true"
     networks:
       - opensearch_net
+
+networks:
+  opensearch_net:
+    driver: bridge
